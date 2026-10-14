@@ -1,0 +1,94 @@
+/* ==========================================================================
+   PaniPuri Shop - Dedicated Print Stylesheet
+   ========================================================================== */
+
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+@media print {
+  html, body {
+    background: #ffffff !important;
+    color: #111111 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 12pt;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  #invoiceModal {
+    display: block !important;
+    position: static !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+  }
+
+  #invoiceModal .modal-box {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  #invoiceModal .modal-head,
+  #invoiceModal > div > div:last-child {
+    display: none !important;
+  }
+
+  #invoicePreview {
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    max-width: none !important;
+    background: #ffffff !important;
+    padding: 8mm !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  #invoicePreview * {
+    visibility: visible !important;
+  }
+
+  #invoicePreview table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 15px 0 !important;
+  }
+
+  #invoicePreview th, 
+  #invoicePreview td {
+    padding: 9px !important;
+    border-bottom: 1px solid #d9dee5 !important;
+    font-size: 11pt !important;
+  }
+
+  #invoicePreview th {
+    background: #f1f5f9 !important;
+    color: #1e293b !important;
+  }
+
+  #invoicePreview .invoice-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    border-bottom: 2px solid #0f172a !important;
+    padding-bottom: 14px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+}

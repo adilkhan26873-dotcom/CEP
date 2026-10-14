@@ -1,0 +1,117 @@
+/* ==========================================================================
+   PaniPuri Shop - Responsive Media Queries
+   ========================================================================== */
+
+@media (max-width: 950px) {
+  .sidebar {
+    width: 72px;
+    padding: 16px 8px;
+  }
+  
+  .brand {
+    justify-content: center;
+    padding: 8px 0 16px;
+  }
+
+  .brand b, .brand small {
+    display: none;
+  }
+
+  .brand-icon.pani-brand-logo {
+    width: 36px;
+    height: 36px;
+  }
+
+  .nav button {
+    justify-content: center;
+    padding: 12px 0;
+  }
+
+  .nav button span {
+    display: none;
+  }
+
+  .nav button .nav-icon {
+    font-size: 20px;
+    width: auto;
+  }
+
+  .logout {
+    font-size: 0;
+    padding: 10px;
+  }
+
+  .logout::after {
+    content: "🚪";
+    font-size: 18px;
+  }
+
+  .main {
+    margin-left: 72px;
+    padding: 20px;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid2, .bill-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .main {
+    padding: 14px;
+    margin-left: 64px;
+  }
+
+  .sidebar {
+    width: 64px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .clock {
+    display: none;
+  }
+
+  .toolbar {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .search {
+    width: 100%;
+  }
+
+  .panel {
+    padding: 16px;
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 580px;
+  }
+
+  .quick {
+    grid-template-columns: 1fr;
+  }
+
+  .login-card {
+    padding: 26px 20px;
+  }
+
+  .pani-logo {
+    width: 100px;
+    height: 100px;
+  }
+}

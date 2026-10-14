@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PaniPuri Shop | Inventory & Billing Management</title>
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/print.css" media="print">
+</head>
+<body>
+
+  <!-- =========================================================================
+       Authentication Screen (Login & Account Creation)
+       ========================================================================= -->
+  <div class="login" id="loginScreen">
+    
+    <!-- Login Card -->
+    <div class="login-card" id="loginCard">
+      <img class="pani-logo login-logo" src="assets/images/logo.png" alt="PaniPuri Shop Logo">
+      <h1>PaniPuri Shop</h1>
+      <div class="sub">Inventory & Billing Management System</div>
+
+      <div class="field">
+        <label for="loginUser">Username</label>
+        <input id="loginUser" type="text" placeholder="Enter username" autocomplete="username">
+      </div>
+
+      <div class="field">
+        <label for="loginPass">Password</label>
+        <div class="password-wrap">
+          <input id="loginPass" type="password" placeholder="Enter password" autocomplete="current-password">
+          <button type="button" class="show-password" onclick="togglePassword('loginPass', this)">Show</button>
+        </div>
+      </div>
+
+      <button class="btn full" onclick="login()">Login to Dashboard</button>
+      <div class="demo">Demo Credentials: <strong>admin</strong> / <strong>admin123</strong></div>
+      <div class="login-link" onclick="showRegister()">Create New Account</div>
+      <div id="loginMessage" class="auth-message"></div>
+    </div>
+
+    <!-- Registration Card -->
+    <div class="login-card" id="registerCard" style="display:none">
+      <div class="logo-fallback">👤</div>
+      <h1>Create Account</h1>
+      <div class="sub">Register a new PaniPuri Shop staff/admin user</div>
+
+      <div class="field">
+        <label for="regName">Full Name</label>
+        <input id="regName" type="text" placeholder="e.g. Adil Khan" autocomplete="name" pattern="[A-Za-z ]+" title="Name can contain letters and spaces only" oninput="this.value=this.value.replace(/[^A-Za-z ]/g,'')">
+      </div>
+
+      <div class="field">
+        <label for="regUser">Username</label>
+        <input id="regUser" type="text" placeholder="Choose a username (min 3 chars)" autocomplete="username">
+      </div>
+
+      <div class="field">
+        <label for="regPass">Password</label>
+        <div class="password-wrap">
+          <input id="regPass" type="password" placeholder="Create password (min 4 chars)" autocomplete="new-password">
+          <button type="button" class="show-password" onclick="togglePassword('regPass', this)">Show</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="regConfirm">Confirm Password</label>
+        <div class="password-wrap">
+          <input id="regConfirm" type="password" placeholder="Re-enter password" autocomplete="new-password">
+          <button type="button" class="show-password" onclick="togglePassword('regConfirm', this)">Show</button>
+        </div>
+      </div>
+
+      <button class="btn success full" onclick="createAccount()">Create Account</button>
+      <div class="login-link" onclick="showLogin()">← Back to Login</div>
+      <div id="registerMessage" class="auth-message"></div>
+      <div class="auth-note">Credentials are securely saved in this system.</div>
+    </div>
+
+  </div>
+
+  <!-- =========================================================================
+       Main Application Shell
+       ========================================================================= -->
+  <div class="app" id="app">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <img class="brand-icon pani-brand-logo" src="assets/images/logo.png" alt="PaniPuri Shop Logo">
+        <div>
+          <b>PaniPuri Shop</b>
+          <small>Inventory & Billing</small>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="active" onclick="showPage('dashboard', this)">
+          <span class="nav-icon">📊</span>
+          <span>Dashboard</span>
+        </button>
+        <button onclick="showPage('inventory', this)">
+          <span class="nav-icon">📦</span>
+          <span>Inventory</span>
+        </button>
+        <button onclick="showPage('billing', this)">
+          <span class="nav-icon">🧾</span>
+          <span>Billing</span>
+        </button>
+        <button onclick="showPage('customers', this)">
+          <span class="nav-icon">👥</span>
+          <span>Customers</span>
+        </button>
+        <button onclick="showPage('ingredients', this)">
+          <span class="nav-icon">🥣</span>
+          <span>Ingredients</span>
+        </button>
+        <button onclick="showPage('reports', this)">
+          <span class="nav-icon">📈</span>
+          <span>Reports</span>
+        </button>
+      </nav>
+
+      <button class="logout" onclick="logout()">
+        <span>🚪 Logout</span>
+      </button>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main">
+      
+      <!-- Topbar Header -->
+      <header class="topbar">
+        <div>
+          <h2 id="pageTitle">Dashboard</h2>
+          <div class="topbar-subtitle">Inventory, Billing & Sales Management System</div>
+        </div>
+        <div class="top-right">
+          <div class="clock" id="clock">Loading...</div>
+          <div class="user-pill" id="userPill">👤 Admin</div>
+        </div>
+      </header>
+
+      <!-- -------------------------------------------------------------------
+           Page 1: Dashboard
+           ------------------------------------------------------------------- -->
+      <section class="page active" id="dashboard">
+        <div class="cards">
+          <div class="card">
+            <div class="card-head">
+              <small>Total Products</small>
+              <div class="icon">📦</div>
+            </div>
+            <h3 id="statProducts">0</h3>
+            <div class="trend">Active menu items</div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <small>Stock Units</small>
+              <div class="icon">🥟</div>
+            </div>
+            <h3 id="statStock">0</h3>
+            <div class="trend">Ready plate units</div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <small>Today's Sales</small>
+              <div class="icon">💰</div>
+            </div>
+            <h3 id="statSales">₹0.00</h3>
+            <div class="trend">Sales generated today</div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <small>Customers</small>
+              <div class="icon">👥</div>
+            </div>
+            <h3 id="statCustomers">0</h3>
+            <div class="trend">Registered customers</div>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="panel">
+            <div class="panel-head">
+              <h3>Low Stock Alerts</h3>
+              <button class="btn light" onclick="showPageById('inventory')">View Inventory</button>
+            </div>
+            <div id="lowStock"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <h3>Recent Invoices</h3>
+              <button class="btn light" onclick="showPageById('reports')">View Reports</button>
+            </div>
+            <div id="recentBills"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Quick Actions</h3>
+          </div>
+          <div class="quick">
+            <button onclick="showPageById('billing')">🧾 Create New Bill</button>
+            <button onclick="openProduct()">➕ Add Product</button>
+            <button onclick="openCustomer()">👥 Add Customer</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           Page 2: Inventory Management
+           ------------------------------------------------------------------- -->
+      <section class="page" id="inventory">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Menu & Product Inventory</h3>
+            <div class="toolbar">
+              <input class="search" id="productSearch" placeholder="Search product or category..." oninput="renderInventory()">
+              <button class="btn success" onclick="openProduct()">+ Add Product</button>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price (INR)</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           Page 3: Billing / POS
+           ------------------------------------------------------------------- -->
+      <section class="page" id="billing">
+        <div class="bill-layout">
+          
+          <!-- Order Input Panel -->
+          <div class="panel">
+            <div class="panel-head">
+              <h3>Create New Bill</h3>
+            </div>
+            <div class="field">
+              <label for="billCustomer">Customer Name</label>
+              <input id="billCustomer" placeholder="Walk-in Customer (or enter name)">
+            </div>
+            <div class="field">
+              <label for="billProduct">Select Product</label>
+              <select id="billProduct"></select>
+            </div>
+            <div class="field">
+              <label for="billQty">Quantity</label>
+              <input id="billQty" type="number" min="1" value="1">
+            </div>
+            <button class="btn full" onclick="addToBill()">Add Item to Bill</button>
+            <div style="margin-top:12px;color:#64748b;font-size:12px">
+              Stock is automatically verified and deducted upon saving the invoice.
+            </div>
+          </div>
+
+          <!-- Current Cart Panel -->
+          <div class="panel">
+            <div class="panel-head">
+              <h3>Current Invoice Cart</h3>
+              <button class="btn danger" onclick="clearBill()">Clear Cart</button>
+            </div>
+            <div id="billItems">
+              <div class="empty">No items added to invoice yet.</div>
+            </div>
+            <div class="bill-total">
+              Total: ₹<span id="billTotal">0.00</span>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:18px">
+              <button class="btn success" style="flex:1" onclick="saveBill()">Save & Generate Invoice</button>
+              <button class="btn secondary" style="flex:1" onclick="printCurrentBill()">Print Last Invoice</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           Page 4: Customer Management
+           ------------------------------------------------------------------- -->
+      <section class="page" id="customers">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Registered Customers</h3>
+            <button class="btn success" onclick="openCustomer()">+ Add Customer</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Customer Name</th>
+                <th>Mobile Number</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="customerBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           Page 5: Kitchen Ingredients (CEP Report Chapter 3)
+           ------------------------------------------------------------------- -->
+      <section class="page" id="ingredients">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Raw Kitchen Ingredients Inventory</h3>
+              <div style="color:#64748b;font-size:13px;margin-top:2px;">Raw material stock used for food preparation</div>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Ingredient Name</th>
+                <th>Unit</th>
+                <th>Current Stock</th>
+                <th>Reorder Level</th>
+                <th>Cost / Unit</th>
+                <th>Stock Status</th>
+              </tr>
+            </thead>
+            <tbody id="ingredientBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------------
+           Page 6: Reports & Analytics
+           ------------------------------------------------------------------- -->
+      <section class="page" id="reports">
+        <div class="cards">
+          <div class="card">
+            <small>Total Invoices</small>
+            <h3 id="reportBills">0</h3>
+          </div>
+          <div class="card">
+            <small>Total Revenue</small>
+            <h3 id="reportRevenue">₹0.00</h3>
+          </div>
+          <div class="card">
+            <small>Total Plates Sold</small>
+            <h3 id="reportItems">0</h3>
+          </div>
+          <div class="card">
+            <small>Total Stock Valuation</small>
+            <h3 id="reportStock">₹0.00</h3>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Sales History & Ledger</h3>
+            <button class="btn secondary" onclick="exportCSV()">Export to CSV</button>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Bill No.</th>
+                <th>Customer</th>
+                <th>Date & Time</th>
+                <th>Items Sold</th>
+                <th>Grand Total</th>
+              </tr>
+            </thead>
+            <tbody id="salesBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- =========================================================================
+       Modals
+       ========================================================================= -->
+
+  <!-- Add/Edit Product Modal -->
+  <div class="modal" id="productModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="productModalTitle">Add Product</h3>
+        <button class="close" onclick="closeModal('productModal')">&times;</button>
+      </div>
+      <input type="hidden" id="editProductId">
+      <div class="field">
+        <label for="pName">Product Name</label>
+        <input id="pName" placeholder="e.g. Pani Puri Plate">
+      </div>
+      <div class="field">
+        <label for="pCategory">Category</label>
+        <input id="pCategory" placeholder="e.g. Pani Puri, Chaat, Extras">
+      </div>
+      <div class="field">
+        <label for="pPrice">Price (₹)</label>
+        <input id="pPrice" type="number" min="0" step="0.5" placeholder="e.g. 30">
+      </div>
+      <div class="field">
+        <label for="pStock">Available Stock (Plates)</label>
+        <input id="pStock" type="number" min="0" placeholder="e.g. 100">
+      </div>
+      <div class="modal-actions">
+        <button class="btn light" onclick="closeModal('productModal')">Cancel</button>
+        <button class="btn success" onclick="saveProduct()">Save Product</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Customer Modal -->
+  <div class="modal" id="customerModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>Add Customer</h3>
+        <button class="close" onclick="closeModal('customerModal')">&times;</button>
+      </div>
+      <div class="field">
+        <label for="cName">Customer Name</label>
+        <input id="cName" placeholder="e.g. Rahul Verma">
+      </div>
+      <div class="field">
+        <label for="cPhone">Mobile Number (10 digits)</label>
+        <input id="cPhone" maxlength="10" placeholder="e.g. 9819988776">
+      </div>
+      <div class="field">
+        <label for="cEmail">Email Address</label>
+        <input id="cEmail" type="email" placeholder="e.g. rahul@example.com">
+      </div>
+      <div class="field">
+        <label for="cAddress">Address / Location</label>
+        <input id="cAddress" placeholder="e.g. Chembur, Mumbai">
+      </div>
+      <div class="modal-actions">
+        <button class="btn light" onclick="closeModal('customerModal')">Cancel</button>
+        <button class="btn success" onclick="saveCustomer()">Save Customer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Invoice Preview & Print Modal -->
+  <div class="modal" id="invoiceModal">
+    <div class="modal-box" style="width:850px">
+      <div class="modal-head">
+        <h3>Tax Invoice Preview</h3>
+        <button class="close" onclick="closeModal('invoiceModal')">&times;</button>
+      </div>
+      <div id="invoicePreview" class="invoice"></div>
+      <div style="display:flex;gap:10px;margin-top:16px">
+        <button class="btn success full" onclick="printInvoice()">🖨️ Print Invoice Receipt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       Scripts
+       ========================================================================= -->
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/inventory.js"></script>
+  <script src="js/billing.js"></script>
+  <script src="js/customers.js"></script>
+  <script src="js/reports.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
